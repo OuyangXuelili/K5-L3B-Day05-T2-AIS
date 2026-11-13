@@ -5,7 +5,7 @@
 | Họ và tên | Mã học viên | Việc đã làm |
 |---|---|---|
 | Trần Anh Dũng | 2A202604037 | Đã có bản thảo §1–§2 về phạm vi tính năng và 8 kịch bản rủi ro. Phụ trách tổng hợp bài nộp và ghi lại ca lạ sau demo (§7). |
-| Nguyễn Công Tú | 2A202604008 | Phụ trách viết phản hồi của AI cho K1 và K6, xác định AI được làm gì và thử các mức tự chủ trên ba kịch bản (§3–§4). Chờ bổ sung. |
+| Nguyễn Công Tú | 2A202604008 | Phụ trách viết phản hồi của AI cho K1 và K6, xác định AI được làm gì và thử các mức tự chủ trên ba kịch bản (§3–§4). |
 | Trần Văn Quang | 2A202604032 | Dựng prototype cho K1 và K6 (`prototype/index.html`), chụp ảnh đánh số HAX/PAIR, hoàn thiện §5 và trình diễn luồng xử lý khi demo. |
 
 ## §1. Lát cắt & phạm vi
@@ -142,5 +142,3 @@ Mức tự chủ đổi lời hứa từ “AI tự gửi gợi ý và câu hỏ
 - **Độ trễ qua đêm sát hạn nộp:** lúc 22:30 (gần hạn 23:59 của Bài tập 3, ngoài giờ TA 08:00–22:00), các yêu cầu `chuyen_TA` hoặc bản nháp `goi_y_bai_tap` chờ TA duyệt sẽ chỉ được xử lý từ `08:00` hôm sau — nhóm chấp nhận đánh đổi tốc độ này để không làm lộ đáp số hoặc phát tán lỗi nguồn.
 
 ## §7. Demo
-
-<!-- Người 1 cập nhật ca lạ và cách nhóm xử lý sau buổi demo. -->
