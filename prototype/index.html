@@ -1,100 +1,182 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>T2 Giáo dục · Nhóm AIS — Prototype K1 (tài liệu §3.3 có câu sai) &amp; K6</title>
+<title>LMS Nhập môn phân tích dữ liệu · Buổi 3 — Trợ lý học bài (Nhóm AIS)</title>
 <style>
-:root{--ink:#1d2321;--mut:#6b6f6c;--line:#dcd8cf;--bg:#f6f4ef;--g:#2e6a4f;--gb:#e5f1ea;--a:#8a6516;--ab:#fbefd3;--r:#a33b2b;--rb:#f8e3df;--b:#28507a;--bb:#e3ecf6;--hl:#ffe58a}
-*{box-sizing:border-box}body{margin:0;font-family:"Be Vietnam Pro","Noto Sans","Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.45}
-header{padding:16px 28px 12px;border-bottom:1px solid var(--line);background:#fff}
-h1{font-size:19px;margin:0 0 4px}.sub{color:var(--mut);font-size:13.5px}
-.toolbar{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap;font-size:14px}
-.toggle{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.toggle button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;font:inherit;font-size:13.5px;cursor:pointer}
-.toggle button.on{border-color:var(--ink);background:var(--ink);color:#fff}
-main{display:grid;grid-template-columns:445px 1fr;gap:22px;padding:20px 28px 28px;max-width:1360px}
-.phone{background:#fff;border:1px solid var(--line);border-radius:28px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);display:flex;flex-direction:column}
-.bar{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);padding:0 6px 8px;border-bottom:1px solid var(--line)}
-.disc{margin:10px 4px 4px;padding:8px 10px;border-radius:10px;background:var(--bb);font-size:13px}
-.chat{display:flex;flex-direction:column;gap:10px;padding:8px 4px;min-height:460px}
-.me{align-self:flex-end;background:var(--b);color:#fff;padding:9px 12px;border-radius:14px 14px 2px 14px;max-width:88%}
-.ai{align-self:flex-start;background:#f1efe9;padding:10px 12px;border-radius:14px 14px 14px 2px;max-width:97%}
-.ai .who{font-size:12px;color:var(--mut);margin-bottom:4px}
-.badge{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;font-weight:600;margin:2px 4px 4px 0}
+:root{
+  --ink:#f1f5f9;--mut:#94a3b8;--line:#263348;--bg:#090d16;--card:#111827;--surf:#1a2436;
+  --pri:#3b82f6;--pri-btn:#2563eb;--pri-b:#132342;
+  --g:#4ade80;--gb:#0b2e1d;--a:#fbbf24;--ab:#332208;--r:#f87171;--rb:#3b1116;--hl:#fde047;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Be Vietnam Pro","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:14.5px;line-height:1.45}
+code{background:#1e293b;color:#cbd5e1;padding:1px 5px;border-radius:4px;font-size:12.5px}
+
+/* Top LMS Navbar */
+.topbar{background:#0b1120;border-bottom:1px solid var(--line);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:2px}
+.crumb{font-size:12px;color:var(--mut)}
+.brand h1{font-size:16px;margin:0;font-weight:700;color:#f8fafc}
+.meta-pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mpill{font-size:12px;padding:3px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--line);color:#e2e8f0}
+.mpill.open{background:var(--ab);border-color:#92400e;color:#fde68a}
+.mpill.onshift{background:var(--gb);border-color:#166534;color:#86efac}
+
+/* Sub-bar */
+.subbar{background:var(--card);border-bottom:1px solid var(--line);padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13.5px}
+.toggle{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.toggle span{color:var(--mut);font-size:13px;margin-right:4px}
+.toggle button{border:1px solid var(--line);background:var(--surf);color:#cbd5e1;border-radius:8px;padding:5px 11px;font:inherit;font-size:13px;cursor:pointer}
+.toggle button.on{background:var(--pri-btn);border-color:var(--pri);color:#fff;font-weight:600}
+.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:#cbd5e1}
+
+/* 3-Column LMS Workspace */
+.workspace{display:grid;grid-template-columns:340px minmax(400px,1fr) 400px;gap:16px;padding:16px 20px 24px;max-width:1480px;margin:0 auto;align-items:start}
+@media(max-width:1180px){.workspace{grid-template-columns:1fr}}
+
+.pane{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.pane-head{padding:11px 14px;border-bottom:1px solid var(--line);background:#0f172a;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pane-head h2{margin:0;font-size:14.5px;font-weight:700;color:#f8fafc}
+.pane-sub{font-size:12px;color:var(--mut)}
+.pane-body{padding:12px 14px}
+
+/* Col 1: Course Material */
+.doc-sec{border:1px solid var(--line);border-radius:9px;padding:9px 11px;margin-bottom:8px;background:var(--surf);transition:.15s}
+.doc-sec h3{margin:0 0 4px;font-size:13.5px;display:flex;justify-content:space-between;align-items:center;gap:6px;color:#f8fafc}
+.doc-sec p{margin:0;font-size:13px;color:#cbd5e1}
+.doc-sec.active{border-color:var(--pri);background:var(--pri-b)}
+.doc-sec.warn-doc{border-color:#d97706;background:#261a09}
+.doc-sec.fixed-doc{border-color:#16a34a;background:#0a2618}
+.doc-tag{font-size:11px;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap}
+.tag-cite{background:#1e3a8a;color:#93c5fd}.tag-flag{background:#451a03;color:#fcd34d}.tag-open{background:#450a0a;color:#fca5a5}.tag-fixed{background:#052e16;color:#86efac}
+.course-box{margin-top:10px;padding:9px 11px;border-radius:9px;background:#0f172a;border:1px solid var(--line);font-size:12.5px;color:#cbd5e1}
+.course-box div{margin-bottom:3px}.course-box div:last-child{margin-bottom:0}
+
+/* Col 2: Assistant Dock */
+.disc{margin:10px 14px 0;padding:8px 11px;border-radius:8px;background:var(--pri-b);border:1px solid #1e40af;font-size:13px;color:#bfdbfe}
+.chat{display:flex;flex-direction:column;gap:10px;padding:12px 14px;min-height:430px}
+.msg{display:flex;flex-direction:column;gap:4px}
+.msg.u{align-items:flex-end}.msg.a{align-items:flex-start}
+.bubble{padding:10px 12px;border-radius:10px;max-width:96%}
+.msg.u .bubble{background:var(--pri-btn);color:#fff;border-bottom-right-radius:2px;max-width:86%}
+.msg.a .bubble{background:var(--surf);border:1px solid var(--line);border-bottom-left-radius:2px;width:100%}
+.msg.ta .bubble{background:#0b2619;border:1px solid #166534;border-bottom-left-radius:2px;width:100%}
+.who{font-size:11.5px;color:var(--mut);font-weight:600;margin-bottom:5px;display:flex;justify-content:space-between;gap:8px}
+.msg.ta .who{color:#86efac}
+.badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:5px;font-weight:600;margin:0 5px 5px 0}
 .b-ok{background:var(--gb);color:var(--g)}.b-warn{background:var(--ab);color:var(--a)}.b-red{background:var(--rb);color:var(--r)}
-.src{background:#fff;border:1px solid var(--line);border-left:4px solid var(--a);border-radius:8px;padding:8px 10px;font-size:13.5px;margin:6px 0}
-.src .h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:var(--mut);margin-bottom:4px}
-.link-btn{background:none;border:0;padding:0;color:var(--b);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;text-decoration:underline}
-mark{background:var(--hl);padding:0 2px;border-radius:3px;font-weight:600}
-.calc{font-size:13px;background:#faf8f2;border:1px dashed #d6c89a;border-radius:6px;padding:6px 8px;margin-top:6px;color:#5c4510}
-.box{border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px}
-.box.warn{background:var(--ab);border:1px solid #ecd59e}.box.done{background:var(--bb);border:1px solid #bcd0e6}.box.mut{background:#eceae4;border:1px solid var(--line)}.box.red{background:var(--rb);border:1px solid #e9bdb4}
-textarea{width:100%;min-height:92px;font:inherit;font-size:13.5px;padding:8px;border:1.5px solid var(--line);border-radius:8px;margin:6px 0;resize:vertical}
-.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.btn{border:0;border-radius:10px;padding:7px 12px;font:inherit;font-size:13.5px;cursor:pointer;background:#e8e5de}
-.btn.pri{background:var(--g);color:#fff}.btn.out{background:#fff;border:1.5px solid var(--ink)}
-.chips{display:flex;flex-direction:column;gap:6px;padding:8px 4px 2px;border-top:1px solid var(--line)}
-.chips .lab{font-size:12px;color:var(--mut)}
-.chip{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:7px 10px;font:inherit;font-size:13px;cursor:pointer}
-.chip.main{border-color:var(--a)}.chip.k6{border-color:var(--b)}
-.input{margin-top:4px;padding:7px 12px;border:1px dashed var(--line);border-radius:999px;color:var(--mut);font-size:12.5px}
-.n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#c2410c;color:#fff;font-size:11.5px;font-weight:700;margin-right:4px;vertical-align:1px;flex:none}
-.hide-n .n{display:none}
-aside{display:flex;flex-direction:column;gap:14px}
-.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px 18px}
-.panel h2{font-size:15.5px;margin:0 0 8px}
-.promise{font-size:14px;border-left:4px solid var(--ink);padding:6px 10px;background:#faf9f5}
+.src{background:#0f172a;border:1px solid var(--line);border-left:3px solid #f59e0b;border-radius:7px;padding:8px 10px;font-size:13px;margin:6px 0;color:#e2e8f0}
+.src .h{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mut);margin-bottom:4px}
+.link-btn{background:none;border:0;padding:0;color:#60a5fa;font:inherit;font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline}
+mark{background:var(--hl);color:#0f172a;padding:0 3px;border-radius:3px;font-weight:700}
+.calc{font-size:12.5px;background:#261a08;border:1px dashed #d97706;border-radius:6px;padding:6px 8px;margin-top:6px;color:#fde68a}
+.box{border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13.5px}
+.box.warn{background:#241907;border:1px solid #b45309;color:#fef3c7}
+.box.done{background:var(--pri-b);border:1px solid #1d4ed8;color:#dbeafe}
+.box.mut{background:#0f172a;border:1px solid var(--line);color:#cbd5e1}
+textarea{width:100%;min-height:80px;font:inherit;font-size:13px;padding:8px;border:1px solid #334155;border-radius:7px;margin:6px 0;resize:vertical;background:#090d16;color:#f8fafc}
+.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.btn{border:1px solid #334155;border-radius:7px;padding:6px 11px;font:inherit;font-size:13px;cursor:pointer;background:#1e293b;color:#e2e8f0}
+.btn:hover{border-color:#64748b}
+.btn.pri{background:var(--pri-btn);border-color:var(--pri);color:#fff;font-weight:600}
+.btn.ok{background:#15803d;border-color:#22c55e;color:#fff;font-weight:600}
+.chips{padding:10px 14px 12px;border-top:1px solid var(--line);background:#0f172a;display:flex;flex-direction:column;gap:6px}
+.chips .lab{font-size:12px;color:var(--mut);font-weight:600}
+.chip{text-align:left;border:1px solid var(--line);background:var(--surf);color:#e2e8f0;border-radius:8px;padding:7px 10px;font:inherit;font-size:13px;cursor:pointer}
+.chip:hover{border-color:var(--pri)}.chip.main{border-left:4px solid #f59e0b}.chip.k6{border-left:4px solid #ef4444}
+.input{padding:6px 10px;border:1px dashed var(--line);border-radius:7px;color:var(--mut);font-size:12px;background:#0b1120}
+
+/* Col 3: TA Console & Autonomy Matrix */
+.col3{display:flex;flex-direction:column;gap:12px}
 .tabs{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-.tab{border:1px solid var(--line);background:#faf9f5;border-radius:8px;padding:5px 10px;font:inherit;font-size:13px;cursor:pointer}
-.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.q{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13.5px;margin-top:8px}
-.q .top{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mut);margin-bottom:4px}
-.empty{color:var(--mut);font-size:13.5px}
-table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}th{color:var(--mut);font-weight:600}
-.changed td{background:#fef3c7}
-.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
-.p-auto{background:var(--gb);color:var(--g)}.p-ta{background:#eef3d8;color:#5b6b16}.p-ask{background:var(--ab);color:var(--a)}.p-no{background:var(--rb);color:var(--r)}
-.ann{padding-left:0;list-style:none;margin:0}.ann li{margin-bottom:5px;font-size:13.5px}
-.foot{font-size:12px;color:var(--mut);padding:0 28px 20px}
+.tab{border:1px solid var(--line);background:var(--surf);color:#cbd5e1;border-radius:7px;padding:4px 9px;font:inherit;font-size:12.5px;cursor:pointer}
+.tab.on{background:var(--pri-btn);color:#fff;border-color:var(--pri);font-weight:600}
+.q{border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-size:13px;margin-top:6px;background:var(--surf)}
+.q .top{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-bottom:4px}
+.ta-reply-box{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.empty{color:var(--mut);font-size:13px}
+.promise{font-size:13px;border-left:3px solid var(--pri);padding:6px 9px;background:var(--surf);border-radius:0 6px 6px 0;color:#e2e8f0}
+table{border-collapse:collapse;width:100%;font-size:12.5px}td,th{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left;vertical-align:top}th{color:var(--mut);font-weight:600}
+.changed td{background:#2b2009}
+.pill{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.p-auto{background:var(--gb);color:var(--g)}.p-ta{background:#1f2e0c;color:#bef264}.p-ask{background:var(--ab);color:var(--a)}.p-no{background:var(--rb);color:var(--r)}
+.ann{padding-left:0;list-style:none;margin:0}.ann li{margin-bottom:5px;font-size:12.5px;color:#cbd5e1}
+.n{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:#ea580c;color:#fff;font-size:11px;font-weight:700;margin-right:4px;vertical-align:1px;flex:none}
+.hide-n .n{display:none}
+.foot{font-size:12px;color:var(--mut);padding:0 20px 18px;max-width:1480px;margin:0 auto}
 </style></head>
 <body>
-<header>
- <h1>T2 Giáo dục · Nhóm AIS — Trợ lý học bài của trang khoá học (ca K1 &amp; K6)</h1>
- <div class="sub">Khoá "Nhập môn phân tích dữ liệu" · Buổi 3 · Bài tập 3 đang mở (hạn 13/11/2026 23:59) · Giờ TA: 08:00–22:00. Dữ liệu dựng, hàng chờ TA mô phỏng.</div>
- <div class="toolbar">
-  <div class="toggle"><span>Mức tự chủ của <code>chuyen_TA</code>:</span>
-   <button data-l="1">① Chỉ nhắc tự gửi</button>
-   <button data-l="2" class="on">② Cần người học duyệt (mức chọn)</button>
-   <button data-l="3">③ AI tự gửi + hoàn tác</button>
-  </div>
-  <button class="btn out" id="reset">↺ Chạy lại</button>
-  <label><input type="checkbox" id="ann" checked> Hiện số chú thích HAX/PAIR</label>
+<header class="topbar">
+ <div class="brand">
+  <div class="crumb">Khoá học: Nhập môn phân tích dữ liệu &rsaquo; Buổi 3: Thống kê mô tả</div>
+  <h1>Cổng học tập &amp; Trợ lý học bài tối muộn · Track T2 · Nhóm AIS</h1>
+ </div>
+ <div class="meta-pills">
+  <span class="mpill" id="clock">22:30 · 13/11/2026 (Ngoài giờ TA)</span>
+  <span class="mpill open">Bài tập 3: Đang mở (Hạn 23:59 13/11)</span>
+  <span class="mpill">Giờ TA: 08:00–22:00</span>
  </div>
 </header>
-<main>
- <section class="phone">
-  <div class="bar"><span>Buổi 3 · Thống kê mô tả</span><span id="clock"></span></div>
+
+<div class="subbar">
+ <div class="toggle">
+  <span>Thử mức tự chủ của <code>chuyen_TA</code>:</span>
+  <button data-l="1">① Chỉ nhắc tự gửi</button>
+  <button data-l="2" class="on">② Cần người học duyệt (mức chọn)</button>
+  <button data-l="3">③ AI tự gửi + hoàn tác</button>
+ </div>
+ <div class="controls">
+  <button class="btn" id="reset">↺ Chạy lại từ đầu</button>
+  <label><input type="checkbox" id="ann" checked> Hiện số chú thích HAX/PAIR</label>
+ </div>
+</div>
+
+<main class="workspace">
+ <!-- CỘT 1: TÀI LIỆU BUỔI 3 & TRẠNG THÁI KHOÁ HỌC -->
+ <section class="pane">
+  <div class="pane-head"><h2>Tài liệu buổi 3 (nguồn duy nhất)</h2><span class="pane-sub">Không có slide</span></div>
+  <div class="pane-body" id="doc-pane"></div>
+ </section>
+
+ <!-- CỘT 2: TRỢ LÝ HỌC BÀI AI + PHẢN HỒI TA -->
+ <section class="pane">
+  <div class="pane-head"><h2>Trợ lý học bài (AI) &amp; Trao đổi TA</h2><span class="pane-sub" id="chat-mode">Sẵn sàng</span></div>
   <div class="disc" id="disc"></div>
   <div class="chat" id="chat"></div>
   <div class="chips" id="chips"></div>
  </section>
- <aside>
-  <div class="panel"><h2>Lời hứa với người học ở mức này</h2><div class="promise" id="promise"></div></div>
-  <div class="panel">
-   <div class="tabs">
-    <button class="tab on" id="tab-q">Phía TA · Câu hỏi chuyển lên (<span id="qcount">0</span>)</button>
-    <button class="tab" id="tab-d">Duyệt gợi ý <code>goi_y_bai_tap</code> (<span id="dcount">1</span>)</button>
+
+ <!-- CỘT 3: PHÍA TA + BẢNG MỨC TỰ CHỦ + CHÚ THÍCH -->
+ <aside class="col3">
+  <div class="pane">
+   <div class="pane-head"><h2>Bảng điều phối TA (mô phỏng)</h2><span class="pane-sub"><code>dang_FAQ</code>: Cấm</span></div>
+   <div class="pane-body">
+    <div class="tabs">
+     <button class="tab on" id="tab-q">Câu hỏi chuyển lên (<span id="qcount">0</span>)</button>
+     <button class="tab" id="tab-d">Duyệt gợi ý <code>goi_y_bai_tap</code> (<span id="dcount">1</span>)</button>
+    </div>
+    <div id="ta-body"></div>
    </div>
-   <div id="ta-body"></div>
-   <div class="box mut" style="font-size:12.5px;margin-top:10px"><code>dang_FAQ</code>: <b>Cấm AI tự đăng.</b> Không có nút đăng FAQ cho AI; giảng viên/TA tự sửa §3.3 sau khi kiểm tra.</div>
   </div>
-  <div class="panel"><h2>Mức tự chủ của 5 thao tác (§4 · dòng tô vàng đang đổi)</h2>
-   <table><tr><th>Thao tác</th><th>Mức</th><th>Cost-of-error (§4)</th></tr><tbody id="tools"></tbody></table></div>
-  <div class="panel"><h2>Chú thích: số trên màn hình là gì (§3)</h2><ul class="ann" id="ann-list"></ul></div>
+
+  <div class="pane">
+   <div class="pane-head"><h2>Lời hứa &amp; 5 thao tác (§4)</h2></div>
+   <div class="pane-body">
+    <div class="promise" id="promise" style="margin-bottom:8px"></div>
+    <table><tr><th>Thao tác</th><th>Mức</th><th>Cost-of-error</th></tr><tbody id="tools"></tbody></table>
+   </div>
+  </div>
+
+  <div class="pane">
+   <div class="pane-head"><h2>Chú thích HAX / PAIR (§3)</h2></div>
+   <div class="pane-body"><ul class="ann" id="ann-list"></ul></div>
+  </div>
  </aside>
 </main>
-<div class="foot">LAB5 · AI20K K5 · L3B · Track T2 · Nhóm AIS. Một file HTML, không gọi AI thật. Hash mở nhanh để chụp ảnh: <code>#k1</code>, <code>#k1-preview</code>, <code>#k1-cancelled</code>, <code>#k1-queued</code>, <code>#k6</code>, <code>#normal</code>.</div>
+
+<div class="foot">LAB5 · AI20K K5 · L3B · Track T2 · Nhóm AIS. Dữ liệu dựng, không gọi AI thật. Hash mở nhanh: <code>#k1</code>, <code>#k1-preview</code>, <code>#k1-queued</code>, <code>#k1-replied</code>, <code>#k6</code>, <code>#normal</code>.</div>
+
 <script>
 const COPY = {
-  clock: '22:30 · 13/11/2026',
   disclosure: '🤖 <b>Bạn đang trò chuyện với AI</b>, không phải TA. Trợ lý chỉ dựa vào tài liệu buổi 1–3 và trang khoá học.',
   greet: 'Chào bạn, mình là trợ lý học bài của khoá. Chọn một tình huống bên dưới để kiểm tra luồng xử lý.',
 
@@ -102,13 +184,13 @@ const COPY = {
   qK6: 'Em ra trung vị 11,5 rồi. Bạn nói đúng hay sai thôi nha.',
   qNormal: 'Trung vị khác trung bình cộng chỗ nào ạ? Khi nào dùng cái nào?',
 
-  // K1 (§3 spec.md)
   k1ReadBadge: 'tra_cuu_tai_lieu · Tự làm (chỉ đọc)',
   k1Status: 'Tài liệu có điểm cần kiểm tra',
   k1SrcTitle: 'Tài liệu buổi 3 · §3.3 Phương sai và độ lệch chuẩn',
   k1SrcBefore: 'Phương sai đo mức độ phân tán của dữ liệu quanh trung bình. Độ lệch chuẩn là căn bậc hai của phương sai, có cùng đơn vị với dữ liệu. ',
   k1SrcFlag: 'Vì là căn bậc hai, độ lệch chuẩn luôn nhỏ hơn phương sai.',
-  k1SrcFull: 'Ghi chú nguồn (Dữ liệu A): tài liệu buổi 3 không đánh số slide, gồm §3.1 Trung bình cộng, §3.2 Trung vị, §3.3 Phương sai và độ lệch chuẩn, §3.4 Giá trị ngoại lai, §3.5 Bài tập 3.',
+  k1SrcFixed: 'Độ lệch chuẩn không luôn nhỏ hơn phương sai (khi phương sai trong khoảng 0 đến 1 thì độ lệch chuẩn lớn hơn phương sai).',
+  k1SrcFull: 'Ghi chú nguồn (Dữ liệu A): tài liệu buổi 3 không đánh số slide, gồm §3.1–§3.5.',
   k1Calc: 'Phép tính phản ví dụ: nếu phương sai = 0,25 → độ lệch chuẩn = √0,25 = 0,5 (0,5 không nhỏ hơn 0,25).',
   k1Reply: 'Bạn phát hiện đúng một mâu thuẫn trong tài liệu. §3.3 viết độ lệch chuẩn luôn nhỏ hơn phương sai, nhưng độ lệch chuẩn là căn bậc hai của phương sai: nếu phương sai là 0,25 thì độ lệch chuẩn là 0,5, không nhỏ hơn 0,25. Vì vậy câu ‘luôn nhỏ hơn’ cần được giảng viên kiểm tra. Mình chưa sửa tài liệu hay gửi câu hỏi cho TA. Bạn có muốn gửi nội dung này cho TA không?',
 
@@ -116,14 +198,13 @@ const COPY = {
   k1BtnEdit: 'Sửa nội dung',
   k1BtnLater: 'Để sau',
   k1LaterMsg: 'Đã giữ câu trả lời và trích dẫn §3.3 trong cuộc trò chuyện. <b>Chưa gửi gì cho TA.</b>',
-
   k1L1Note: 'Mức ① (chỉ nhắc tự gửi): bạn có thể tự copy đoạn trích §3.3 và phản ví dụ 0,25 → 0,5 sang trang Hỏi TA (giờ trực tiếp theo từ 08:00 ngày 14/11). AI không soạn và không gửi thay.',
 
   pvTitle: 'Xem trước nội dung gửi TA (chuyen_TA)',
   pvNote: 'Kiểm tra và chỉnh sửa trước khi gửi. <b>Chưa bấm Xác nhận gửi thì chưa chuyển cho TA.</b>',
   pvDraft: 'Mục §3.3 ghi "độ lệch chuẩn luôn nhỏ hơn phương sai". Em thử phương sai 0,25 thì độ lệch chuẩn là 0,5 (> 0,25). Nhờ TA và giảng viên kiểm tra lại câu này trong tài liệu ạ.',
-  pvAttach: 'Đính kèm cùng câu hỏi: trích dẫn §3.3, câu bị nghi sai và phản ví dụ 0,25 → 0,5 (chỉ ghi nhận cần kiểm tra, chưa sửa tài liệu).',
-  pvEta: 'Giờ TA: 08:00–22:00. Hiện tại là 22:30 — dự kiến TA xem từ <b>08:00 ngày 14/11</b> (không hứa trả lời ngay).',
+  pvAttach: 'Đính kèm: trích dẫn §3.3, câu bị nghi sai và phản ví dụ 0,25 → 0,5 (chỉ ghi nhận cần kiểm tra, chưa sửa tài liệu).',
+  pvEta: 'Giờ TA: 08:00–22:00. Hiện tại 22:30 — dự kiến TA xem từ <b>08:00 ngày 14/11</b> (không hứa trả lời ngay).',
   pvConfirm: 'Xác nhận gửi',
   pvCancel: 'Hủy',
   pvCancelled: 'Đã hủy. <b>Chưa gửi câu hỏi cho TA.</b> Bản nháp vẫn được giữ nếu bạn muốn mở lại.',
@@ -132,103 +213,156 @@ const COPY = {
   queuedMsg: (id, auto) => `Đã chuyển cho TA · Mã <b>${id}</b>${auto ? ' (AI tự gửi — đang trong <b>10:00 hoàn tác</b>)' : ''}.<br>Thời gian dự kiến: TA trực tiếp theo từ <b>08:00 ngày 14/11</b>.`,
   undoneMsg: 'Đã hoàn tác yêu cầu gửi TA. Câu hỏi đã được rút khỏi hàng chờ.',
 
-  // K6 (§3 spec.md)
+  taDefaultK1: 'Chào em, cảm ơn em đã báo lỗi! Em tính đúng rồi: với phương sai trong khoảng (0; 1) thì độ lệch chuẩn lớn hơn phương sai (như √0,25 = 0,5). Giảng viên đã kiểm tra và sửa lại câu cuối mục §3.3 trên trang khoá học.',
+  taDefaultK6: 'Chào em, vì Bài tập 3 vẫn mở trước đây nên TA không xác nhận đáp số. Em hãy sắp xếp 8 mức lương tăng dần, lấy hai giá trị ở vị trí thứ 4 và thứ 5 rồi tính trung bình cộng của chúng nhé.',
+
   k6Badge: 'Bài tập 3 đang mở (hạn 13/11/2026 23:59)',
   k6SrcTitle: 'Tài liệu buổi 3 · §3.2 Trung vị',
   k6SrcText: 'Giá trị đứng giữa khi sắp xếp dữ liệu tăng dần. Nếu số giá trị là chẵn, trung vị là trung bình cộng của hai giá trị đứng giữa. Trung vị ít bị ảnh hưởng bởi giá trị ngoại lai, nên thường dùng cho dữ liệu lệch như thu nhập hay giá nhà.',
   k6Reply: 'Vì Bài tập 3 đang mở, mình không thể xác nhận đúng hay sai: điều đó có thể tiết lộ đáp số. Theo §3.2, hãy tự sắp xếp các giá trị theo thứ tự tăng dần, rồi xác định hai giá trị ở giữa và tính trung bình cộng của chúng. Mình có thể giải thích lại cách tìm vị trí giữa, nhưng sẽ không nói đáp số.',
-  k6Steps: 'Cách tìm hai vị trí giữa khi số phần tử là chẵn (n = 8): sắp xếp dữ liệu tăng dần từ vị trí 1 đến 8, sau đó lấy hai vị trí ở giữa là <b>vị trí thứ 4 và vị trí thứ 5</b>, rồi tính trung bình cộng của hai giá trị tại hai vị trí đó. (Bạn tự đối chiếu trên dãy số của mình ở §3.5 nhé.)',
+  k6Steps: 'Cách tìm hai vị trí giữa khi số phần tử là chẵn (n = 8): sắp xếp dữ liệu tăng dần từ vị trí 1 đến 8, lấy hai vị trí ở giữa là <b>vị trí thứ 4 và vị trí thứ 5</b>, rồi tính trung bình cộng của hai giá trị tại hai vị trí đó.',
   k6Draft: 'Em đang làm Bài tập 3 và còn phân vân bước tìm trung vị theo §3.2. Nhờ TA gợi ý thêm giúp em cách kiểm tra bước làm (không cần báo đáp số ạ).',
   k6Skipped: 'Đã bỏ qua gợi ý. Không có đáp số nào bị lộ và chưa gửi câu hỏi nào cho TA.',
 
-  // Ca bình thường (§4 spec.md)
   nBadge: 'tra_cuu_tai_lieu · §3.1 & §3.2 · Tự làm',
   nReply: '<b>Trung bình cộng (§3.1):</b> tổng các giá trị chia cho số giá trị; bị kéo mạnh bởi giá trị ngoại lai.<br><b>Trung vị (§3.2):</b> giá trị đứng giữa khi sắp xếp tăng dần (nếu chẵn thì lấy trung bình cộng của hai giá trị giữa); ít bị ngoại lai ảnh hưởng nên thường dùng cho dữ liệu lệch như thu nhập hay giá nhà.'
 };
 
+const DOCS = [
+  { id:'3.1', title:'§3.1 Trung bình cộng', text:'Tổng các giá trị chia cho số giá trị. Trung bình bị kéo mạnh bởi giá trị ngoại lai.' },
+  { id:'3.2', title:'§3.2 Trung vị', text:COPY.k6SrcText },
+  { id:'3.3', title:'§3.3 Phương sai và độ lệch chuẩn' },
+  { id:'3.4', title:'§3.4 Giá trị ngoại lai', text:'Giá trị khác hẳn phần lớn dữ liệu. Trước khi bỏ, cần hỏi: lỗi nhập liệu hay dữ liệu thật?' },
+  { id:'3.5', title:'§3.5 Bài tập 3 (Đang mở)', text:'Lương 8 nhân viên (triệu đồng): 9, 10, 10, 11, 12, 12, 13, 45. (a) Tính trung bình và trung vị. (b) Số nào mô tả lương điển hình tốt hơn?' }
+];
+
 const PROMISES = {
-  1: '"Mình chỉ tra cứu và chỉ ra chỗ cần kiểm tra; bạn tự mở trang Hỏi TA để gửi." An toàn nhất cho quyền kiểm soát nội dung, nhưng 22:30 học viên dễ ngại thao tác thêm và bỏ qua lỗi nguồn.',
-  2: '"AI tra cứu và hướng dẫn bước đầu ngay; nội dung gửi cho người khác (chuyen_TA) phải qua bạn xem, sửa và xác nhận trước khi gửi, nên có thể chờ và được báo ETA." <b>Mức nhóm AIS chọn (§3–§4).</b>',
-  3: '"Mình tự gửi luôn cho TA ngay khi phát hiện mâu thuẫn; bạn có 10 phút hoàn tác." Nhanh, nhưng gửi nội dung học viên chưa duyệt và TA có thể đã đọc trước khi hoàn tác.'
+  1: '"Mình chỉ tra cứu và chỉ ra chỗ cần kiểm tra; bạn tự mở trang Hỏi TA để gửi." An toàn cho quyền kiểm soát, nhưng 22:30 dễ bỏ dở.',
+  2: '"AI tra cứu và hướng dẫn bước đầu ngay; nội dung gửi đi (chuyen_TA) phải qua bạn duyệt trước khi gửi." <b>Mức nhóm AIS chọn (§3–§4).</b>',
+  3: '"Mình tự gửi luôn cho TA khi phát hiện mâu thuẫn; bạn có 10 phút hoàn tác." Nhanh nhưng gửi nội dung học viên chưa duyệt.'
 };
 
 const ANN = [
-  ['1','HAX G1 · Làm rõ hệ thống làm được gì','Nhãn "Bạn đang trò chuyện với AI" và câu "Mình chưa sửa tài liệu hay gửi câu hỏi cho TA."'],
-  ['2','HAX G2 + PAIR Explainability & Trust','Trạng thái "Tài liệu có điểm cần kiểm tra" + nút mở trích dẫn §3.3, tô rõ câu "luôn nhỏ hơn".'],
-  ['3','HAX G11 · Giải thích vì sao','Phản ví dụ 0,25 → 0,5 giải thích cụ thể vì sao câu trong §3.3 cần giảng viên kiểm tra.'],
-  ['4','Mức tự chủ · chuyen_TA (người học duyệt) + G8/G9','Nút Gửi cho TA / Sửa nội dung / Để sau và thẻ xem trước (sửa, Xác nhận gửi, Hủy giữ bản nháp).'],
-  ['5','PAIR Errors + Graceful Failure','Báo ETA từ 08:00 ngày 14/11 (giờ TA 08:00–22:00), không hứa trả lời ngay và không giả vờ đã sửa tài liệu.'],
-  ['6','HAX G10 + G8 (ca K6)','Nhãn "Bài tập 3 đang mở", từ chối xác nhận đúng/sai, chỉ dẫn quy trình §3.2 và có nút Bỏ qua / Hỏi TA.']
+  ['1','HAX G1','Nhãn đang nói chuyện với AI + câu chưa sửa tài liệu hay gửi TA.'],
+  ['2','HAX G2 + PAIR Explainability','Trạng thái cần kiểm tra + mở §3.3 (bên trái & trong chat) tô vàng câu sai.'],
+  ['3','HAX G11','Phản ví dụ 0,25 → 0,5 giải thích vì sao §3.3 cần kiểm tra.'],
+  ['4','chuyen_TA (Người học duyệt) + G8/G9','Nút Gửi / Sửa / Để sau và thẻ xem trước (sửa, Xác nhận, Hủy giữ nháp).'],
+  ['5','PAIR Graceful Failure + Ca trực TA','Báo ETA từ 08:00 ngày 14/11; khi đến ca trực 08:00, TA trả lời và tự sửa §3.3.'],
+  ['6','HAX G10 + G8 (ca K6)','Từ chối xác nhận đáp số 11,5, dẫn §3.2 và có nút Bỏ qua / Hỏi TA.']
 ];
 
 const $ = s => document.querySelector(s);
-let L = 2, flow = 'start', step = 'idle', srcOpen = false, taTab = 'q';
+let L = 2, flow = 'start', step = 'idle', srcOpen = false, taTab = 'q', shiftNow = false, docFixed = false;
 let draft = COPY.pvDraft, draftSrc = 'K1 · §3.3', queue = [], seq = 317;
-let k5Draft = { id: 'GY-042', caseName: 'K5 · Bài tập 3 đang mở (§3.5)', text: 'Hãy sắp xếp 8 mức lương từ nhỏ đến lớn rồi xác định hai vị trí đứng giữa theo mục §3.2 trước khi tính trung bình.', status: 'waiting' };
+let k5Draft = { id:'GY-042', caseName:'K5 · Bài tập 3 (§3.5)', text:'Hãy sắp xếp 8 mức lương từ nhỏ đến lớn rồi xác định hai vị trí đứng giữa theo mục §3.2 trước khi tính trung bình.', status:'waiting' };
 
-const me = x => `<div class="me">${x}</div>`;
-const ai = x => `<div class="ai"><div class="who">Trợ lý học bài (AI)</div>${x}</div>`;
+const me = x => `<div class="msg u"><div class="bubble">${x}</div></div>`;
+const ai = x => `<div class="msg a"><div class="bubble"><div class="who"><span>Trợ lý học bài (AI)</span><span>Dựa trên Dữ liệu A &amp; B</span></div>${x}</div></div>`;
+const taMsg = q => `<div class="msg ta"><div class="bubble"><div class="who"><span>👤 Phản hồi từ TA (Ca trực sáng · 08:05 14/11)</span><span>Mã ${q.id}</span></div><div>${esc(q.reply)}</div>${q.fixedDoc ? '<div style="margin-top:6px;font-size:12px;color:#86efac">✓ Giảng viên/TA đã cập nhật câu cuối mục §3.3 trên trang khoá học.</div>' : ''}</div></div>`;
 const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function renderDocs(){
+  const sentK1 = queue.some(q => q.src.startsWith('K1'));
+  $('#doc-pane').innerHTML = DOCS.map(d => {
+    let cls = 'doc-sec', tag = '', text = d.text;
+    if (d.id === '3.3') {
+      text = docFixed ? (COPY.k1SrcBefore + '<span style="color:#86efac;font-weight:600">' + COPY.k1SrcFixed + '</span>')
+                      : (COPY.k1SrcBefore + '<mark>' + COPY.k1SrcFlag + '</mark>');
+      if (docFixed) {
+        cls += ' fixed-doc';
+        tag = '<span class="doc-tag tag-fixed">TA/GV đã sửa · 08:05 14/11</span>';
+      } else if (flow === 'k1') {
+        cls += ' warn-doc';
+        tag = `<span class="doc-tag tag-flag">${sentK1 ? 'Chờ TA · gốc chưa sửa' : 'AI gắn cờ cần kiểm tra'}</span>`;
+      }
+    } else if (flow === 'k6' && d.id === '3.2') {
+      cls += ' active'; tag = '<span class="doc-tag tag-cite">AI đang dẫn</span>';
+    } else if (flow === 'k6' && d.id === '3.5') {
+      cls += ' warn-doc'; tag = '<span class="doc-tag tag-open">Đang mở · giấu đáp số</span>';
+    } else if (flow === 'normal' && (d.id === '3.1' || d.id === '3.2')) {
+      cls += ' active'; tag = '<span class="doc-tag tag-cite">AI đang dẫn</span>';
+    }
+    return `<div class="${cls}"><h3><span>${d.title}</span>${tag}</h3><p>${text}</p></div>`;
+  }).join('') + `<div class="course-box">
+    <div><b>Buổi đã mở:</b> 1, 2, 3 (Buổi 7 p-value chưa mở)</div>
+    <div><b>Bài tập 2:</b> Hết hạn 06/11 (đáp án đã công bố)</div>
+    <div><b>Bài tập 3:</b> Hạn <b>13/11/2026 23:59</b> · <b>Đang mở</b></div>
+  </div>`;
+}
 
 function k1Answer(withBtns){
   return ai(`<span class="badge b-ok">${COPY.k1ReadBadge}</span><span class="badge b-warn"><span class="n">2</span>${COPY.k1Status}</span>
-   <div class="src"><div class="h"><span>${COPY.k1SrcTitle}</span><button class="link-btn" onclick="toggleSrc()">${srcOpen ? 'Thu gọn mục' : 'Mở §3.3'}</button></div>
+   <div class="src"><div class="h"><span>${COPY.k1SrcTitle}</span><button class="link-btn" onclick="toggleSrc()">${srcOpen ? 'Thu gọn' : 'Mở §3.3'}</button></div>
     ${COPY.k1SrcBefore}<mark>${COPY.k1SrcFlag}</mark>
-    ${srcOpen ? `<div style="margin-top:6px;font-size:12.5px;color:var(--mut)">${COPY.k1SrcFull}</div>` : ''}
+    ${srcOpen ? `<div style="margin-top:5px;font-size:12px;color:var(--mut)">${COPY.k1SrcFull}</div>` : ''}
     <div class="calc"><span class="n">3</span>${COPY.k1Calc}</div>
    </div>
    <div>${COPY.k1Reply}</div>
-   ${L === 1 ? `<div class="box mut" style="font-size:13.5px">${COPY.k1L1Note}</div>` : ''}
-   ${withBtns && L === 2 ? `<div class="btns"><span class="n">4</span><button class="btn pri" onclick="openPv('K1 · §3.3', false)">${COPY.k1BtnSend}</button><button class="btn out" onclick="openPv('K1 · §3.3', true)">${COPY.k1BtnEdit}</button><button class="btn" onclick="setStep('later')">${COPY.k1BtnLater}</button></div>` : ''}`);
+   ${L === 1 ? `<div class="box mut" style="font-size:13px">${COPY.k1L1Note}</div>` : ''}
+   ${withBtns && L === 2 ? `<div class="btns"><span class="n">4</span><button class="btn pri" onclick="openPv('K1 · §3.3', false)">${COPY.k1BtnSend}</button><button class="btn" onclick="openPv('K1 · §3.3', true)">${COPY.k1BtnEdit}</button><button class="btn" onclick="setStep('later')">${COPY.k1BtnLater}</button></div>` : ''}`);
 }
 
 function previewBox(){
   return ai(`<div class="box warn"><span class="n">4</span><b>${COPY.pvTitle}</b>
-   <div style="font-size:13.5px;margin-top:4px">${COPY.pvNote}</div>
+   <div style="font-size:13px;margin-top:3px">${COPY.pvNote}</div>
    <textarea id="draft">${esc(draft)}</textarea>
-   <div style="font-size:12.5px;color:var(--mut)">${COPY.pvAttach}</div>
-   <div style="font-size:13px;margin-top:6px">${COPY.pvEta}</div>
-   <div class="btns"><button class="btn pri" onclick="confirmSend()">${COPY.pvConfirm}</button><button class="btn" onclick="cancelSend()">${COPY.pvCancel}</button></div></div>`);
+   <div style="font-size:12px;color:var(--mut)">${COPY.pvAttach}</div>
+   <div style="font-size:12.5px;margin-top:5px">${COPY.pvEta}</div>
+   <div class="btns"><button class="btn ok" onclick="confirmSend()">${COPY.pvConfirm}</button><button class="btn" onclick="cancelSend()">${COPY.pvCancel}</button></div></div>`);
 }
 
 function k6Answer(){
   let extra = '';
+  const qItem = queue.find(q => q.src.startsWith('K6'));
   if (step === 'steps') extra = ai(`<span class="badge b-ok">${COPY.nBadge}</span><div>${COPY.k6Steps}</div>`);
   if (step === 'skip') extra = ai(`<div class="box mut">${COPY.k6Skipped}</div>`);
   if (step === 'preview') extra = previewBox();
-  if (step === 'cancelled') extra = ai(`<div class="box mut">${COPY.pvCancelled}<div class="btns"><button class="btn out" onclick="setStep('preview')">${COPY.pvReopen}</button></div></div>`);
-  if (step === 'queued') extra = ai(`<div class="box done"><span class="n">5</span>${COPY.queuedMsg(queue[queue.length-1].id, false)}</div>`);
+  if (step === 'cancelled') extra = ai(`<div class="box mut">${COPY.pvCancelled}<div class="btns"><button class="btn" onclick="setStep('preview')">${COPY.pvReopen}</button></div></div>`);
+  if ((step === 'queued' || step === 'replied') && qItem) {
+    extra = ai(`<div class="box done"><span class="n">5</span>${COPY.queuedMsg(qItem.id, false)}</div>`);
+    if (qItem.reply) extra += taMsg(qItem);
+  }
 
   return me(COPY.qK6) + ai(`<span class="badge b-red"><span class="n">6</span>${COPY.k6Badge}</span>
-   <div class="src"><div class="h"><span>${COPY.k6SrcTitle}</span><button class="link-btn" onclick="toggleSrc()">${srcOpen ? 'Thu gọn mục' : 'Mở §3.2'}</button></div>
-    ${srcOpen ? COPY.k6SrcText : 'Căn cứ: quy trình tìm trung vị khi số giá trị là chẵn (§3.2). Bấm "Mở §3.2" để đọc nguyên văn.'}
+   <div class="src"><div class="h"><span>${COPY.k6SrcTitle}</span><button class="link-btn" onclick="toggleSrc()">${srcOpen ? 'Thu gọn' : 'Mở §3.2'}</button></div>
+    ${srcOpen ? COPY.k6SrcText : 'Căn cứ: quy trình tìm trung vị khi số giá trị là chẵn (§3.2). Xem ở cột Tài liệu bên trái hoặc bấm "Mở §3.2".'}
    </div>
    <div>${COPY.k6Reply}</div>
-   ${step === 'idle' || step === 'steps' ? `<div class="btns"><button class="btn pri" onclick="setStep('steps')">Giải thích cách tìm vị trí giữa</button><button class="btn out" onclick="openPv('K6 · §3.2', true)">Hỏi TA</button><button class="btn" onclick="setStep('skip')">Bỏ qua</button></div>` : ''}`) + extra;
+   ${step === 'idle' || step === 'steps' ? `<div class="btns"><button class="btn pri" onclick="setStep('steps')">Giải thích cách tìm vị trí giữa</button><button class="btn" onclick="openPv('K6 · §3.2', true)">Hỏi TA</button><button class="btn" onclick="setStep('skip')">Bỏ qua</button></div>` : ''}`) + extra;
 }
 
 function render(){
-  $('#clock').textContent = COPY.clock;
+  const ck = $('#clock');
+  ck.textContent = shiftNow ? '08:05 · 14/11/2026 (Trong ca trực TA)' : '22:30 · 13/11/2026 (Ngoài giờ TA)';
+  ck.classList.toggle('onshift', shiftNow);
+
   $('#disc').innerHTML = `<span class="n">1</span>${COPY.disclosure}`;
+  $('#chat-mode').textContent = flow === 'k1' ? 'Ca K1 · Nguồn nghi sai' : flow === 'k6' ? 'Ca K6 · Bài tập đang mở' : flow === 'normal' ? 'Ca bình thường' : 'Sẵn sàng';
+  renderDocs();
+
   let h = '';
   if (flow === 'start') h = ai(COPY.greet);
   else if (flow === 'normal') h = me(COPY.qNormal) + ai(`<span class="badge b-ok">${COPY.nBadge}</span><div>${COPY.nReply}</div>`);
   else if (flow === 'k6') h = k6Answer();
   else if (flow === 'k1') {
     h = me(COPY.qK1) + k1Answer(step === 'idle');
+    const qItem = queue.find(q => q.src.startsWith('K1'));
     if (step === 'later') h += ai(`<div class="box mut">${COPY.k1LaterMsg}</div>`);
     if (step === 'preview') h += previewBox();
-    if (step === 'cancelled') h += ai(`<div class="box mut">${COPY.pvCancelled}<div class="btns"><button class="btn out" onclick="setStep('preview')">${COPY.pvReopen}</button></div></div>`);
-    if (step === 'queued') h += ai(`<div class="box done"><span class="n">5</span>${COPY.queuedMsg(queue[queue.length-1].id, L===3)}${L===3 ? `<div class="btns"><button class="btn out" onclick="undoAuto()">Hoàn tác</button></div>` : ''}</div>`);
+    if (step === 'cancelled') h += ai(`<div class="box mut">${COPY.pvCancelled}<div class="btns"><button class="btn" onclick="setStep('preview')">${COPY.pvReopen}</button></div></div>`);
+    if ((step === 'queued' || step === 'replied') && qItem) {
+      h += ai(`<div class="box done"><span class="n">5</span>${COPY.queuedMsg(qItem.id, L===3 && !qItem.reply)}${L===3 && !qItem.reply ? `<div class="btns"><button class="btn" onclick="undoAuto()">Hoàn tác</button></div>` : ''}</div>`);
+      if (qItem.reply) h += taMsg(qItem);
+    }
     if (step === 'undone') h += ai(`<div class="box mut">${COPY.undoneMsg}</div>`);
   }
   $('#chat').innerHTML = h;
 
   const busy = step === 'preview';
   $('#chips').innerHTML = busy ? '<div class="lab">Đang xem trước câu gửi TA — bấm Xác nhận gửi hoặc Hủy trước khi đổi câu.</div>' :
-   `<div class="lab">Chọn ca để thử (dữ liệu dựng §2–§4):</div>
+   `<div class="lab">Chọn tình huống để kiểm tra:</div>
     <button class="chip main" onclick="startFlow('k1')"><b>K1 (ca demo):</b> ${COPY.qK1}</button>
-    <button class="chip k6" onclick="startFlow('k6')"><b>K6 (xin xác nhận đáp số):</b> ${COPY.qK6}</button>
+    <button class="chip k6" onclick="startFlow('k6')"><b>K6 (xác nhận đáp số):</b> ${COPY.qK6}</button>
     <button class="chip" onclick="startFlow('normal')"><b>Ca bình thường:</b> ${COPY.qNormal}</button>
     <div class="input">Nhập câu hỏi… (tắt trong prototype, dùng 3 ca dựng sẵn)</div>`;
 
@@ -239,24 +373,32 @@ function render(){
   $('#tab-d').classList.toggle('on', taTab === 'd');
 
   if (taTab === 'q') {
-    $('#ta-body').innerHTML = queue.length ? queue.map(q => `<div class="q"><div class="top"><b>${q.id}</b><span>${q.time} · ${q.src}</span></div>
+    $('#ta-body').innerHTML = queue.length ? queue.map((q, idx) => `<div class="q"><div class="top"><b>${q.id}</b><span>${q.time} · ${q.src}</span></div>
       <div>${esc(q.text)}</div>
-      <div style="font-size:12.5px;color:var(--mut);margin-top:4px">${q.note} · Trạng thái: <b>Chờ TA (chưa sửa tài liệu)</b></div></div>`).join('')
-      : '<div class="empty">Chưa có câu nào được chuyển lên TA.</div>';
+      <div style="font-size:11.5px;color:var(--mut);margin-top:4px">${q.note} · Trạng thái: <b style="color:${q.reply ? '#4ade80' : '#fbbf24'}">${q.reply ? 'Đã trả lời (08:05 14/11)' : 'Chờ ca trực 08:00'}</b></div>
+      ${q.reply ? `<div class="ta-reply-box"><b style="color:#86efac">Trả lời của TA:</b> ${esc(q.reply)}</div>` :
+        `<div class="ta-reply-box">
+          <div style="font-size:12px;color:#86efac;margin-bottom:4px">⏰ Mô phỏng đến ca trực 08:00 ngày 14/11:</div>
+          <textarea id="ta-draft-${idx}" style="min-height:66px">${esc(q.src.startsWith('K1') ? COPY.taDefaultK1 : COPY.taDefaultK6)}</textarea>
+          ${q.src.startsWith('K1') ? `<label style="font-size:12px;display:block;margin-bottom:6px"><input type="checkbox" id="ta-fix-${idx}" checked> Giảng viên/TA cập nhật sửa câu cuối §3.3</label>` : ''}
+          <button class="btn ok" onclick="sendTaReply(${idx})">TA gửi trả lời (08:05 · 14/11)</button>
+        </div>`}
+      </div>`).join('')
+      : '<div class="empty">Chưa có câu nào được gửi lên TA.</div>';
   } else {
     $('#ta-body').innerHTML = `<div class="q"><div class="top"><b>${k5Draft.id}</b><span>${k5Draft.caseName}</span></div>
-      <div><i>Bản nháp từ <code>soan_goi_y_bai_tap</code> (ẩn với học viên):</i><br>${k5Draft.text}</div>
-      <div style="font-size:12.5px;color:var(--mut);margin-top:4px">Trạng thái: <b>${k5Draft.status === 'waiting' ? 'Chờ TA duyệt (goi_y_bai_tap)' : k5Draft.status === 'approved' ? 'Đã duyệt gửi cho học viên' : 'Đã từ chối — không gửi'}</b></div>
-      ${k5Draft.status === 'waiting' ? `<div class="btns"><button class="btn pri" onclick="reviewDraft('approved')">Duyệt gửi</button><button class="btn" onclick="reviewDraft('rejected')">Từ chối</button></div>` : ''}</div>`;
+      <div><i>Nháp từ <code>soan_goi_y_bai_tap</code> (ẩn với học viên):</i><br>${k5Draft.text}</div>
+      <div style="font-size:11.5px;color:var(--mut);margin-top:4px">Trạng thái: <b>${k5Draft.status === 'waiting' ? 'Chờ TA duyệt (goi_y_bai_tap)' : k5Draft.status === 'approved' ? 'Đã duyệt gửi cho học viên' : 'Đã từ chối — không gửi'}</b></div>
+      ${k5Draft.status === 'waiting' ? `<div class="btns"><button class="btn ok" onclick="reviewDraft('approved')">Duyệt gửi</button><button class="btn" onclick="reviewDraft('rejected')">Từ chối</button></div>` : ''}</div>`;
   }
 
-  const chLv = {1:['Chỉ nhắc tự gửi','p-auto','Học viên tự mở kênh hỏi TA; chậm và dễ bỏ qua lỗi nguồn.'],2:['Người học duyệt','p-ask','Người học xem, sửa và xác nhận trước khi gửi; sau xác nhận báo ETA 08:00.'],3:['Tự làm + hoàn tác','p-auto','AI tự gửi ngay khi thấy mâu thuẫn; rủi ro gửi nội dung học viên chưa muốn chia sẻ.']}[L];
+  const chLv = {1:['Nhắc tự gửi','p-auto','Học viên tự mở kênh hỏi TA.'],2:['Người học duyệt','p-ask','Xem, sửa và xác nhận trước khi gửi; báo ETA 08:00.'],3:['Tự làm + hoàn tác','p-auto','Tự gửi ngay; rủi ro gửi nội dung chưa duyệt.']}[L];
   const TOOLS = [
-    ['tra_cuu_tai_lieu','Tự làm','p-auto','Chỉ đọc. Luôn hiện đoạn trích và mã mục để người học tự đối chiếu.'],
-    ['soan_goi_y_bai_tap','Tự làm','p-auto','Tách riêng: chỉ tạo bản nháp vào hàng chờ TA, không hiện cho học viên.'],
-    ['goi_y_bai_tap','Cần TA duyệt','p-ta','Gợi ý quá tay lộ đáp số bài đang mở và không thu hồi được.'],
+    ['tra_cuu_tai_lieu','Tự làm','p-auto','Chỉ đọc. Hiện đoạn trích và mã mục.'],
+    ['soan_goi_y_bai_tap','Tự làm','p-auto','Chỉ tạo bản nháp vào hàng chờ TA.'],
+    ['goi_y_bai_tap','Cần TA duyệt','p-ta','Lộ đáp số bài đang mở không thu hồi được.'],
     ['chuyen_TA',chLv[0],chLv[1],chLv[2],1],
-    ['dang_FAQ','Cấm','p-no','Gỡ vẫn không thu hồi được điều cả lớp đã đọc (nhất là khi nguồn sai).']
+    ['dang_FAQ','Cấm','p-no','Gỡ vẫn không thu hồi được điều cả lớp đã đọc.']
   ];
   $('#tools').innerHTML = TOOLS.map(r => `<tr class="${r[4]?'changed':''}"><td><code>${r[0]}</code></td><td><span class="pill ${r[2]}">${r[1]}</span></td><td>${r[3]}</td></tr>`).join('');
   $('#ann-list').innerHTML = ANN.map(a => `<li><span class="n">${a[0]}</span><b>${a[1]}</b> — ${a[2]}</li>`).join('');
@@ -265,7 +407,8 @@ function render(){
 function startFlow(f){
   flow = f; step = 'idle'; srcOpen = false;
   if (f === 'k1' && L === 3) {
-    queue.push({ id: 'TA-0' + (seq++), time: '22:30 13/11', src: 'K1 · §3.3', text: COPY.pvDraft, note: 'AI tự gửi (chưa qua học viên duyệt)' });
+    queue = queue.filter(q => !q.src.startsWith('K1'));
+    queue.push({ id:'TA-0'+(seq++), time:'22:30 13/11', src:'K1 · §3.3', text:COPY.pvDraft, note:'AI tự gửi (chưa qua học viên duyệt)' });
     step = 'queued';
   }
   render();
@@ -281,8 +424,20 @@ function openPv(src, focus){
 function cancelSend(){ draft = $('#draft').value; step = 'cancelled'; render(); }
 function confirmSend(){
   draft = $('#draft').value;
-  queue.push({ id: 'TA-0' + (seq++), time: '22:30 13/11', src: draftSrc, text: draft, note: 'Người học đã xem và xác nhận gửi' });
+  queue = queue.filter(q => q.src !== draftSrc);
+  queue.push({ id:'TA-0'+(seq++), time:'22:30 13/11', src:draftSrc, text:draft, note:'Người học đã xem và xác nhận gửi' });
   step = 'queued'; render();
+}
+function sendTaReply(idx){
+  const q = queue[idx];
+  const txt = $('#ta-draft-' + idx);
+  const fix = $('#ta-fix-' + idx);
+  q.reply = txt ? txt.value : (q.src.startsWith('K1') ? COPY.taDefaultK1 : COPY.taDefaultK6);
+  q.fixedDoc = !!(fix && fix.checked);
+  if (q.fixedDoc) docFixed = true;
+  shiftNow = true;
+  step = 'replied';
+  render();
 }
 function undoAuto(){ queue.pop(); step = 'undone'; render(); }
 function reviewDraft(st){ k5Draft.status = st; render(); }
@@ -294,14 +449,19 @@ document.querySelectorAll('.toggle button').forEach(b => b.onclick = () => {
 });
 $('#tab-q').onclick = () => { taTab = 'q'; render(); };
 $('#tab-d').onclick = () => { taTab = 'd'; render(); };
-$('#reset').onclick = () => { L = 2; document.querySelectorAll('.toggle button').forEach(x => x.classList.toggle('on', x.dataset.l==='2')); flow = 'start'; step = 'idle'; queue = []; seq = 317; k5Draft.status = 'waiting'; taTab = 'q'; location.hash = ''; render(); };
+$('#reset').onclick = () => {
+  L = 2; document.querySelectorAll('.toggle button').forEach(x => x.classList.toggle('on', x.dataset.l==='2'));
+  flow = 'start'; step = 'idle'; queue = []; seq = 317; k5Draft.status = 'waiting'; taTab = 'q';
+  shiftNow = false; docFixed = false; location.hash = ''; render();
+};
 $('#ann').onchange = e => document.body.classList.toggle('hide-n', !e.target.checked);
 
 const h0 = location.hash.slice(1);
 if (h0 === 'k1') { flow = 'k1'; step = 'idle'; }
 if (h0 === 'k1-preview') { flow = 'k1'; step = 'preview'; }
 if (h0 === 'k1-cancelled') { flow = 'k1'; step = 'cancelled'; }
-if (h0 === 'k1-queued') { flow = 'k1'; queue.push({ id: 'TA-0317', time: '22:30 13/11', src: 'K1 · §3.3', text: COPY.pvDraft, note: 'Người học đã xem và xác nhận gửi' }); step = 'queued'; }
+if (h0 === 'k1-queued') { flow = 'k1'; queue.push({ id:'TA-0317', time:'22:30 13/11', src:'K1 · §3.3', text:COPY.pvDraft, note:'Người học đã xem và xác nhận gửi' }); step = 'queued'; }
+if (h0 === 'k1-replied') { flow = 'k1'; shiftNow = true; docFixed = true; queue.push({ id:'TA-0317', time:'22:30 13/11', src:'K1 · §3.3', text:COPY.pvDraft, note:'Người học đã xem và xác nhận gửi', reply:COPY.taDefaultK1, fixedDoc:true }); step = 'replied'; }
 if (h0 === 'k6') { flow = 'k6'; step = 'idle'; }
 if (h0 === 'normal') { flow = 'normal'; }
 render();
