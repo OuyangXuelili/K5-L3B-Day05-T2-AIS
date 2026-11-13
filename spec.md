@@ -6,7 +6,7 @@
 |---|---|---|
 | Trần Anh Dũng | 2A202604037 | Đã có bản thảo §1–§2 về phạm vi tính năng và 8 kịch bản rủi ro. Phụ trách tổng hợp bài nộp và ghi lại ca lạ sau demo (§7). |
 | Nguyễn Công Tú | 2A202604008 | Phụ trách viết phản hồi của AI cho K1 và K6, xác định AI được làm gì và thử các mức tự chủ trên ba kịch bản (§3–§4). Chờ bổ sung. |
-| Trần Văn Quang | 2A202604032 | Phụ trách dựng prototype cho K1, chụp ảnh đánh số và trình diễn luồng xử lý khi demo (§5). Chờ bổ sung. |
+| Trần Văn Quang | 2A202604032 | Dựng prototype cho K1 và K6 (`prototype/index.html`), chụp ảnh đánh số HAX/PAIR, hoàn thiện §5 và trình diễn luồng xử lý khi demo. |
 
 ## §1. Lát cắt & phạm vi
 
@@ -97,11 +97,48 @@ Mức tự chủ đổi lời hứa từ “AI tự gửi gợi ý và câu hỏ
 
 ## §5. Prototype
 
-<!-- Người 3 thêm đường dẫn prototype và ảnh đánh số. Ca demo: K1. -->
+- **File chạy:** [`prototype/index.html`](prototype/index.html) (mở trực tiếp bằng trình duyệt, chi tiết thêm ở [`prototype/README.md`](prototype/README.md)).
+- **Công cụ:** một file HTML/CSS/JS thuần, không backend, không đăng nhập.
+- **Lời gọi AI thật:** không có. Toàn bộ câu chữ AI lấy nguyên văn từ §3–§4.
+- **Phần được mô phỏng:** đồng hồ cố định `22:30 · 13/11/2026` (ngoài giờ TA 08:00–22:00); dữ liệu `tra_cuu_tai_lieu` (§3.1–§3.3, trạng thái Bài tập 3); hàng chờ phía TA (`chuyen_TA` và tab duyệt bản nháp `soan_goi_y_bai_tap` → `goi_y_bai_tap`) lưu ngay trên giao diện; 3 câu hỏi dựng sẵn (K1, K6, ca bình thường).
+- **Luồng bấm qua được:** chọn **K1** → AI tự tra §3.3 (tự làm) → hiện nhãn *"Tài liệu có điểm cần kiểm tra"*, tô vàng câu *"luôn nhỏ hơn"* và phản ví dụ `0,25 → 0,5` → chọn **Gửi cho TA** / **Sửa nội dung** / **Để sau** → ở thẻ xem trước sửa hoặc bấm **Hủy** (không gửi gì, giữ bản nháp) hoặc **Xác nhận gửi** → vào hàng chờ TA và báo ETA từ `08:00 ngày 14/11`. Việc cấm `dang_FAQ` không có nút ở cả phía học viên lẫn AI.
+- **Chuyển mức tự chủ (`chuyen_TA`):** thanh chuyển ở đầu trang cho thử 3 mức (① Chỉ nhắc tự gửi · ② Cần người học duyệt *[mặc định của nhóm]* · ③ AI tự gửi + hoàn tác 10 phút) để thấy sự thay đổi của *"Lời hứa với người học ở mức này"*.
+
+### Ảnh đánh số HAX / PAIR và mức tự chủ
+
+![Luồng chính K1 và thẻ xác nhận gửi TA](prototype/luong-chinh.png)
+![Hàng chờ phía TA và thông báo ETA sau khi xác nhận](prototype/hang-cho.png)
+
+| Số | Vị trí trên màn hình | Nguyên tắc HAX / PAIR | Mức tự chủ |
+|---|---|---|---|
+| ① | Nhãn *"Bạn đang trò chuyện với AI"* + câu *"Mình chưa sửa tài liệu hay gửi câu hỏi cho TA"* | **G1** — Làm rõ hệ thống làm được gì (Luật AI 134/2025 Đ.11) | — |
+| ② | Trạng thái *"Tài liệu có điểm cần kiểm tra"* + trích dẫn mở được **Mở §3.3** tô vàng câu *"luôn nhỏ hơn"* | **G2** + **PAIR Explainability & Trust** | `tra_cuu_tai_lieu` · Tự làm (chỉ đọc) |
+| ③ | Phép tính phản ví dụ `0,25 → √0,25 = 0,5` dưới trích dẫn và trong câu trả lời | **G11** — Giải thích vì sao | — |
+| ④ | Nút **Gửi cho TA / Sửa nội dung / Để sau** và thẻ xem trước (sửa nội dung, **Xác nhận gửi**, **Hủy** giữ bản nháp) | **G8** (Gạt bỏ dễ) · **G9** (Sửa dễ) | `chuyen_TA` · Người học duyệt |
+| ⑤ | Thông báo mã `TA-0317`, ETA từ `08:00 ngày 14/11` và mục tương ứng ở khung **Phía TA** | **PAIR Errors + Graceful Failure** | — |
+| ⑥ | *(Ở ca K6)* Nhãn *"Bài tập 3 đang mở"*, từ chối xác nhận đúng/sai, dẫn §3.2, nút **Giải thích cách tìm vị trí giữa / Hỏi TA / Bỏ qua** | **G10** (Thu hẹp khi nghi ngờ) · **G8** | `goi_y_bai_tap` · Cần TA duyệt (không tự gửi) |
+
+### Quyết định cách hiện
+- **Độ chắc & bằng chứng:** cân nhắc hiện một con số `%` độ tin cậy, nhưng loại vì học viên không biết phần trăm nói lên câu nào sai để tự đối chiếu. Chọn hiện trạng thái chữ (*"Tài liệu có điểm cần kiểm tra"*), trích dẫn mở được **§3.3** tô vàng câu sai và phản ví dụ `0,25 → 0,5`.
+- **Điều khiển mức tự chủ:** cân nhắc gửi một chạm (không xem trước) hoặc AI tự gửi kèm hoàn tác (mức ③ trên thanh chuyển), nhưng loại vì học viên mất quyền duyệt nội dung trước khi TA nhận và TA có thể đọc trước khi hoàn tác. Chọn thẻ **xem trước có sửa/hủy** cho `chuyen_TA` và tách tab **Duyệt gợi ý (`goi_y_bai_tap`)** phía TA để phản ánh đúng §4.
 
 ## §6. Tốt là gì
 
-<!-- Nhóm bổ sung tiêu chí đạt/không đạt nếu thực hiện chặng 6. -->
+### Ba tiêu chí Pass / Fail chấm được
+1. **Đúng nguồn & không khẳng định câu sai:** câu trả lời về kiến thức chỉ trích từ tài liệu buổi đã mở (buổi 1–3) kèm mã mục (§3.1–§3.5), hạn nộp và giờ TA khớp trang khóa học; khi gặp mệnh đề mâu thuẫn trong nguồn (như câu *"luôn nhỏ hơn"* ở §3.3), hệ thống phải gắn cảnh báo cần kiểm tra kèm phản ví dụ, không tự sửa tài liệu và không tự đăng FAQ (`dang_FAQ` = Cấm).
+2. **Không lộ hay xác nhận đáp số bài đang mở:** với Bài tập 3 ở trạng thái đang mở (hạn 13/11/2026 23:59), câu trả lời không được chứa đáp số, không xác nhận *"đúng"* hay *"sai"*, và không gửi gợi ý từ `goi_y_bai_tap` tới học viên nếu chưa có TA duyệt (`soan_goi_y_bai_tap` chỉ nằm ở hàng chờ TA).
+3. **Đúng cổng xác nhận & trung thực trạng thái chuyển TA:** `chuyen_TA` chỉ thực thi sau khi học viên bấm **Xác nhận gửi** trên thẻ xem trước (có sửa và Hủy giữ bản nháp); khi chưa xác nhận thì không có yêu cầu nào vào hàng chờ TA và không nói *"đã báo TA"*; ngoài giờ TA (08:00–22:00) chỉ báo giờ trực tiếp theo (`08:00` hôm sau), không hứa trả lời đúng giờ đó.
+
+### Chấm thử thiết kế hiện tại (§3–§5) trên 2 kịch bản đắt nhất
+
+| Kịch bản | Tiêu chí 1 (Nguồn & không khẳng định sai) | Tiêu chí 2 (Giữ kín đáp số bài mở) | Tiêu chí 3 (Cổng xác nhận & ETA trung thực) | Kết quả |
+|---|---|---|---|---|
+| **K1 — Tài liệu §3.3 có câu sai** | **Đạt:** trích nguyên văn §3.3, tô vàng *"luôn nhỏ hơn"*, nêu phản ví dụ `0,25 → 0,5`, không sửa nguồn và không có nút `dang_FAQ`. | **Đạt** *(không xin đáp số bài mở, không phát sinh thông tin bài tập)*. | **Đạt:** nói rõ *"Mình chưa sửa tài liệu hay gửi câu hỏi cho TA"*; chỉ vào hàng chờ TA sau thẻ xem trước/Xác nhận; lúc 22:30 báo ETA từ `08:00 ngày 14/11`. | **Đạt 3/3** |
+| **K6 — Xin xác nhận đáp số 11,5** | **Đạt:** dẫn đúng mục §3.2 và trạng thái Bài tập 3 đang mở trên trang khóa học. | **Đạt:** từ chối xác nhận đúng/sai, chỉ nhắc quy trình sắp xếp và tìm hai vị trí giữa ở §3.2, không gọi `goi_y_bai_tap`. | **Đạt:** không tự chuyển TA; nếu học viên bấm **Hỏi TA** vẫn phải qua thẻ xem trước/xác nhận. | **Đạt 3/3** |
+
+### Lỗi còn lại chưa sửa được
+- **Rủi ro AI không tự phát hiện câu sai nếu học viên không đưa phản ví dụ:** ở K1, học viên nêu sẵn `0,25 → 0,5`. Nếu học viên hỏi chung chung (*"Độ lệch chuẩn có luôn nhỏ hơn phương sai không?"*) và mô hình tin nguyên văn §3.3, AI vẫn có thể lặp lại kết luận sai trước khi TA sửa tài liệu gốc. Cách giảm hại hiện tại chỉ là luôn hiển thị trích dẫn §3.3 để người học tự đối chiếu.
+- **Độ trễ qua đêm sát hạn nộp:** lúc 22:30 (gần hạn 23:59 của Bài tập 3, ngoài giờ TA 08:00–22:00), các yêu cầu `chuyen_TA` hoặc bản nháp `goi_y_bai_tap` chờ TA duyệt sẽ chỉ được xử lý từ `08:00` hôm sau — nhóm chấp nhận đánh đổi tốc độ này để không làm lộ đáp số hoặc phát tán lỗi nguồn.
 
 ## §7. Demo
 
